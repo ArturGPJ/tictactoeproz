@@ -10,16 +10,14 @@ class JogoDaVelha:
     VAZIO = ' '
 
     def __init__(self):
+        self.resetar_jogo()
+
+    def resetar_jogo(self):
         print("Bem vindo ao jogo da velha!")
         self.nome_jogador_1 = input("Nome do Jogador 1: ")
         self.simbolo_jogador_1 = 'X'
         self.nome_jogador_2 = input("Nome do Jogador 2: ")
         self.simbolo_jogador_2 = 'O'
-
-        jogador_inicial = random.choice([self.nome_jogador_1, self.nome_jogador_2])  # Para Escolher aleatoriamente quem começa
-        self.turno = jogador_inicial
-        print(f"{self.turno} ({'X' if self.turno == self.nome_jogador_1 else 'O'}) começa.")
-
         self.tabuleiro = {str(i): self.VAZIO for i in range(1, 10)}
 
     def exibir_tabuleiro(self):
@@ -40,14 +38,16 @@ class JogoDaVelha:
         return None
 
     def jogar(self):
-        while True:
-            if os.name == 'nt':
-                os.system('cls')
-            else:
-                os.system('clear')
+        print("Novo Jogo Iniciado!")
+        jogador_inicial = random.choice([self.nome_jogador_1, self.nome_jogador_2])
+        self.turno = jogador_inicial
+        print(f"{self.turno} ({'X' if self.turno == self.nome_jogador_1 else 'O'}) começa.")
 
+        while True:
+            os.system('cls' if os.name == 'nt' else 'clear')
+            print("\nTabuleiro atual:")
             self.exibir_tabuleiro()
-            print(f"{self.turno} - escolha sua jogada entre 1-9:")
+            print(f"\n{self.turno} - escolha sua jogada entre 1-9:")
             jogada = input("Jogada: ")
 
             if self.tabuleiro.get(jogada) == self.VAZIO:
@@ -65,7 +65,12 @@ class JogoDaVelha:
             else:
                 print(f"Jogada inválida, {jogada} já foi realizada ou não é uma posição válida.")
 
-        self.exibir_tabuleiro()
+        jogar_novamente = input("Deseja jogar novamente? (s/n): ")
+        if jogar_novamente.lower() == 's':
+            self.resetar_jogo()
+            self.jogar()
+        else:
+            print("Obrigado por jogar! Até a próxima.")
 
 
 jogo = JogoDaVelha()
